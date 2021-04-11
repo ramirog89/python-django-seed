@@ -112,6 +112,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # OVERRIDE USER MODEL FOR AUTHENTICATION
 AUTH_USER_MODEL = 'app.User'
 
+TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'src.app.utils.pagination.CustomPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': [

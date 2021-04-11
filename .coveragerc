@@ -1,0 +1,16 @@
+[run]
+omit =
+      # Omit __init__ files from report which are not tested
+      ./*__init__*
+      # Omit models files from report which are not tested
+      ./*model*
+      # Omit test files from report
+      ./*test*
+      # Omit dto files from report which are not tested
+      ./src/app/dtos/*
+      # Omit config files from report
+      ./src/app/config/*
+      # Omit database from report
+      ./src/app/database/*
+      # Omit migration from report
+      ./src/app/migrations/*
