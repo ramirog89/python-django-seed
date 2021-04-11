@@ -16,4 +16,5 @@ class UserCreateDto(serializers.ModelSerializer):
 class UserUpdateDto(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'is_active', 'is_staff']
+        fields = ['username', 'email']
+        optional_fields = ['password', 'is_active', 'is_staff']

@@ -13,14 +13,7 @@ class UserRepository(BaseUserManager):
     def get_by_id(self, id):
         return User.objects.get(id=id)
 
-    def get_by_username(self, username):
-        return User.objects.get(username=username)
-
     def save(self, user_entity):
-        """Creates and saves a new user"""
-        if not user_entity['email']:
-            raise ValueError('Users must have an email address.')
-        
         user = User(username=user_entity['username'],
                     password=user_entity['password'],
                     email=self.normalize_email(user_entity['email']))
@@ -34,7 +27,7 @@ class UserRepository(BaseUserManager):
         user = User.objects.get(id=id)
         user.username = user_entity['username']
         user.email = user_entity['email']
-        if user_entity['password'] is not None:
+        if 'password' in user_entity:
             user.set_password(user_entity['password'])
         user.save()
         return user

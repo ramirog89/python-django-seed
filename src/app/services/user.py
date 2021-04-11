@@ -13,15 +13,14 @@ class UserService:
     def __init__(self, repo: UserRepository):
         self.repo = repo
 
-    def get_by_id(self, pk):
-        user = self.repo.get_by_id(pk)
-        return UserDto(user).data
+    def get_by_id(self, id):
+        try:
+            return self.repo.get_by_id(id)
+        except:
+            return None
 
     def get_all(self, request):
-        try:
-            return paginate(self.repo.get_all(), request, UserDto)
-        except Exception as error:
-            raise Exception(error)
+        return paginate(self.repo.get_all(), request, UserDto)
 
     def create(self, user):
         created_user = self.repo.save(user)

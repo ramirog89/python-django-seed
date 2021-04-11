@@ -17,21 +17,17 @@ from src.app.config.swagger import CustomPaginatorClass
 @api_view(['GET'])
 @inject
 def list(request, service: UserService):
-    try:
-        return Response(data=service.get_all(request), status=status.HTTP_200_OK)
-    except Exception as error:
-        return Response({ 'error': str(error) }, status=status.HTTP_400_BAD_REQUEST)
+    return Response(data=service.get_all(request), status=status.HTTP_200_OK)
 
 
 @swagger_auto_schema(method='GET', responses={200: UserDto})
 @api_view(['GET'])
 @inject
 def get(request, id, service: UserService):
-    try:
-        user = service.get_by_id(id)
+    user = service.get_by_id(id)
+    if user:
         return Response(user, status=status.HTTP_200_OK)
-    except Exception as error:
-        return Response({ 'error': str(error) }, status=status.HTTP_400_BAD_REQUEST)
+    return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 
 @swagger_auto_schema(method='POST', request_body=UserCreateDto, responses={200: UserDto})
@@ -64,6 +60,6 @@ def update(request, id, service: UserService):
 def delete(request, id, service: UserService):
     try:
         service.delete(id)
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
     except Exception as error:
         return Response({ 'error': str(error) }, status=status.HTTP_400_BAD_REQUEST)

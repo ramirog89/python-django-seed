@@ -13,7 +13,6 @@ class UserIntegrationTest(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.user = User.objects.create(name='test', email='test@test.com', password='test1234')
-        # self.test_account_create()
 
     def tearDown(self):
         pass
@@ -26,9 +25,9 @@ class UserIntegrationTest(APITestCase):
 
     def test_account_create(self):
         payload = {
-            'name': 'testingUser',
+            'username': 'testingUser',
             'email': 'test@email.com',
-            'created_at': '2019-09-30'
+            'password': 'test1234'
         }
         request = self.factory.post('/users', payload)
         force_authenticate(request, user=self.user)
@@ -36,64 +35,72 @@ class UserIntegrationTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    # def test_account_create_invalid(self):
-    #     view = AccountController.as_view({'post': 'create'})
-    #     payload = {
-    #         'name': 'testingUser',
-    #         'email': 'test@email.com'
-    #     }
-    #     request = self.factory.post('/api/accounts/', payload)
-    #     response = view(request)
+    def test_account_create_invalid(self):
+        payload = {
+            'email': 'test@email.com',
+            'password': ''
+        }
+        request = self.factory.post('/users', payload)
+        force_authenticate(request, user=self.user)
+        response = UserController.create(request)
 
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # def test_account_details(self):
-    #     view = AccountController.as_view({'get': 'account_detail'})
-    #     request = self.factory.get('/api/accounts/1')
-    #     response = view(request, pk=1)
+    def test_user_details(self):
+        request = self.factory.get('/users/1')
+        force_authenticate(request, user=self.user)
+        response = UserController.get(request, id=1)
 
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, self.user)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # def test_account_details_not_found(self):
-    #     view = AccountController.as_view({'get': 'account_detail'})
-    #     request = self.factory.get('/api/accounts/2')
-    #     response = view(request, pk=2)
+    def test_user_details_invalid(self):
+        request = self.factory.get('/users/1')
+        force_authenticate(request, user=self.user)
+        response = UserController.get(request, id=1)
 
-    #     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # def test_account_update(self):
-    #     view = AccountController.as_view({'put': 'update'})
-    #     payload = {
-    #         'name': 'testingUpdateUser',
-    #         'email': 'test@email.com',
-    #         'created_at': '2018-09-30'
-    #     }
-    #     request = self.factory.put('/api/accounts/1', payload)
-    #     response = view(request, pk=1)
+    def test_account_details_not_found(self):
+        request = self.factory.get('/users/3')
+        force_authenticate(request, user=self.user)
+        response = UserController.get(request, id=3)
 
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    # def test_account_update_invalid(self):
-    #     view = AccountController.as_view({'put': 'update'})
-    #     payload = {
-    #         'name': 'testingUpdateUser',
-    #         'email': 'test@email.com'
-    #     }
-    #     request = self.factory.put('/api/accounts/1', payload)
-    #     response = view(request, pk=1)
+    def test_account_update(self):
+        payload = {
+            'username': 'updatedUser',
+            'email': 'updated@email.com',
+            'password': 'updatedPassword'
+        }
+        request = self.factory.put('/users', payload)
+        force_authenticate(request, user=self.user)
+        response = UserController.update(request, id=1)
 
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # def test_account_delete(self):
-    #     view = AccountController.as_view({'put': 'delete'})
-    #     request = self.factory.delete('/api/accounts/1')
-    #     response = view(request, pk=1)
+    def test_account_update_invalid(self):
+        payload = {
+            'username': '',
+            'email': ''
+        }
+        request = self.factory.put('/users', payload)
+        force_authenticate(request, user=self.user)
+        response = UserController.update(request, id=1)
 
-    #     self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # def test_account_delete_invalid(self):
-    #     view = AccountController.as_view({'put': 'delete'})
-    #     request = self.factory.delete('/api/accounts/2')
-    #     response = view(request, pk=2)
+    def test_account_delete(self):
+        request = self.factory.delete('/users')
+        force_authenticate(request, user=self.user)
+        response = UserController.delete(request, id=1)
 
-    #     self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_account_delete_invalid(self):
+        request = self.factory.delete('/users')
+        force_authenticate(request, user=self.user)
+        response = UserController.delete(request, id=3)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
