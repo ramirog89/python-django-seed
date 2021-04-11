@@ -1,32 +1,31 @@
-from serum import inject, dependency
+from serum import dependency
 
 from django.contrib.auth.hashers import check_password
 
+from rest_framework import viewsets
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenViewBase
 
 from src.app.repositories.user import UserRepository
 from src.app.models import User
 from src.app.dtos.auth import LoginDTO
-from src.app.dtos.token import TokenDto
+from src.app.dtos.token import TokenDto, TokenDTO
+
+
+class TokenObject(object):
+    pass
+
 
 @dependency
-class AuthenticationService:
+class AuthenticationService(TokenViewBase):
+    request = None
+    format_kwarg = None
+    
+    def get_serializer_class(self):
+        return TokenDTO
 
-    @inject
-    def __init__(self, repo: UserRepository):
-        self.repo = repo
-
-    def authenticate(self, payload, **kwargs):
-        try:
-            login = LoginDTO(data=payload)
-            login.is_valid(raise_exception=True)
-            user_valid = self.repo.get_by_username(payload['username'])
-        except User.DoesNotExist:
-            raise Exception('User Does Not Exist.')
-
-        pwd_valid = check_password(payload['password'], user_valid.password)
-
-        if user_valid and pwd_valid:
-            token = RefreshToken.for_user(user_valid)
-            return { 'token': str(token) }
-        raise Exception('Invalid password.')
+    def authenticate(self, request, *args, **kwargs):
+        token_response = super().post(request, args, kwargs)
+        token = TokenObject()
+        token.token = token_response.data['access']
+        return TokenDto(token).data

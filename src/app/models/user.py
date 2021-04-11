@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import UserManager, AbstractBaseUser
 
 class User(AbstractBaseUser):
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
@@ -13,6 +13,11 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
+
+    # This is needed to be able to login with my token with the user database of django
+    # Since im using same values that django default username,password to authenticate
+    # I need to indicate which will be the user manager to perform al queries to DB
+    objects = UserManager()
 
     class Meta:
         db_table = 'user'

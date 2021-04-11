@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from src.app.models.user import User
 
 
-class LoginDTO(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'password']
+class LoginDTO(serializers.Serializer):
+    username = serializers.CharField(max_length=200)
+    password = serializers.CharField(max_length=128)

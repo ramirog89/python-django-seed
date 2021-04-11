@@ -24,22 +24,12 @@ class UserService:
             raise Exception(error)
 
     def create(self, user):
-        serializer = UserCreateDto(data=user)
-        try:
-            serializer.is_valid(raise_exception=True)
-            created_user = self.repo.save(user)
-            return UserDto(created_user).data
-        except Exception as error:
-            raise Exception(error)
+        created_user = self.repo.save(user)
+        return UserDto(created_user).data
 
     def update(self, user, id):
-        serializer = UserUpdateDto(data=user)
-        try:
-            serializer.is_valid(raise_exception=True)
-            updated_user = self.repo.update(user, id)
-            return UserDto(updated_user).data
-        except Exception as error:
-            raise Exception(error)
+        updated_user = self.repo.update(user, id)
+        return UserDto(updated_user).data
 
     def delete(self, id):
         try:

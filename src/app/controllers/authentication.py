@@ -4,7 +4,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.views import TokenViewBase
 
 from drf_yasg.utils import swagger_auto_schema
 
@@ -18,12 +17,12 @@ from src.app.services.authentication import AuthenticationService
 @permission_classes([AllowAny])
 @inject
 def login(request, service: AuthenticationService):
-    try:
-        token = service.authenticate(payload=request.data)
+    dto = LoginDTO(data=request.data)
+    if  dto.is_valid():
+        token = service.authenticate(request)
         return Response(token, status=status.HTTP_200_OK)
-    except Exception as error:
-        print(error)
-        return Response({ 'error': str(error) }, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(dto.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(methods=['POST'], responses={200: None})
@@ -31,7 +30,6 @@ def login(request, service: AuthenticationService):
 @inject
 def logout(request):
     try:
-        tokenResponse = super().post(request, args, kwargs)
-        return tokenResponse
+        return Response(None, status=status.HTTP_200_OK)
     except Exception as error:
         return Response({ 'error': str(error) }, status=status.HTTP_400_BAD_REQUEST)

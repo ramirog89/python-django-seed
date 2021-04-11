@@ -28,10 +28,8 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-   #  path('auth/login', controllers.authentication.login, name='auth user'),
-   #  path('auth/logout', controllers.authentication.logout, name='logout user'),
-    path('auth/login', controllers.auth.AuthenticationController.as_view({'post': 'login'}), name='auth_login'),
-    path('auth/logout', controllers.auth.AuthenticationController.as_view({'post': 'logout'}), name='auth_logout'),
+    path('auth/login', controllers.authentication.login, name='auth user'),
+    path('auth/logout', controllers.authentication.logout, name='logout user'),
     path('users', controllers.user.list, name='get user list'),
     path('users/<int:id>', controllers.user.get, name='get user'),
     path('users/create', controllers.user.create, name='create user'),

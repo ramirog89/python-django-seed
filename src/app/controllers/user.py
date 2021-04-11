@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from serum import inject
 
 from drf_yasg.utils import swagger_auto_schema
@@ -16,7 +15,6 @@ from src.app.config.swagger import CustomPaginatorClass
 
 @swagger_auto_schema(method='GET', query_serializer=PaginationQueryParamsDto, responses={200: UserDto(many=True)})
 @api_view(['GET'])
-@permission_classes([AllowAny])
 @inject
 def list(request, service: UserService):
     try:
@@ -36,28 +34,28 @@ def get(request, id, service: UserService):
         return Response({ 'error': str(error) }, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @swagger_auto_schema(method='POST', request_body=UserCreateDto, responses={200: UserDto})
 @api_view(['POST'])
-@permission_classes([AllowAny])
 @inject
 def create(request, service: UserService):
-    try:
+    serializer = UserCreateDto(data=request.data)
+    if serializer.is_valid():
         user = service.create(request.data)
         return Response(user, status=status.HTTP_201_CREATED)
-    except Exception as error:
-        return Response({ 'error': str(error) }, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(method='PUT', request_body=UserUpdateDto, responses={200: UserDto})
 @api_view(['PUT'])
 @inject
 def update(request, id, service: UserService):
-    try:
+    serializer = UserUpdateDto(data=request.data)
+    if serializer.is_valid():
         user = service.update(request.data, id)
         return Response(user, status=status.HTTP_200_OK)
-    except Exception as error:
-        return Response({ 'error': str(error) }, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(method='DELETE', responses={200: None})
