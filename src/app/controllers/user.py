@@ -4,13 +4,11 @@ from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view
 
 from src.app.services.user import UserService
-from src.app.dtos.pagination import PaginationDto, PaginationQueryParamsDto
+from src.app.dtos.pagination import PaginationQueryParamsDto
 from src.app.dtos.user import UserDto, UserCreateDto, UserUpdateDto
-from src.app.config.swagger import CustomPaginatorClass
 
 
 @swagger_auto_schema(method='GET', query_serializer=PaginationQueryParamsDto, responses={200: UserDto(many=True)})
@@ -62,4 +60,4 @@ def delete(request, id, service: UserService):
         service.delete(id)
         return Response(status=status.HTTP_204_NO_CONTENT)
     except Exception as error:
-        return Response({ 'error': str(error) }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': str(error)}, status=status.HTTP_400_BAD_REQUEST)

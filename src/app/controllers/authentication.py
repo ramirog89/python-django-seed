@@ -18,7 +18,7 @@ from src.app.services.authentication import AuthenticationService
 @inject
 def login(request, service: AuthenticationService):
     dto = LoginDTO(data=request.data)
-    if  dto.is_valid():
+    if dto.is_valid():
         token = service.authenticate(request)
         return Response(token, status=status.HTTP_200_OK)
     else:

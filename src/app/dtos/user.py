@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from src.app.models.user import User
 
+
 class UserDto(serializers.ModelSerializer):
     class Meta:
         model = User

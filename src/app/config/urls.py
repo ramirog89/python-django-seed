@@ -1,5 +1,5 @@
 # django url handler
-from django.urls import include, path
+from django.urls import path
 # rest api features
 from rest_framework import routers, permissions
 
@@ -12,14 +12,14 @@ from src.app import controllers
 
 # schema for swagger
 schema_view = get_schema_view(
-   openapi.Info(
-      title="Rest API",
-      default_version='v1',
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
-   url="http://localhost:8000/",
-   urlconf="src.app.config.urls"
+    openapi.Info(
+        title="Rest API",
+        default_version='v1',
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+    url="http://localhost:8000/",
+    urlconf="src.app.config.urls"
 )
 
 

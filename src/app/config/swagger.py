@@ -1,5 +1,7 @@
 from drf_yasg.inspectors import PaginatorInspector
 from drf_yasg import openapi
+from collections import OrderedDict
+
 
 class CustomPaginatorClass(PaginatorInspector):
 

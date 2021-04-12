@@ -1,14 +1,7 @@
 from serum import dependency
 
-from django.contrib.auth.hashers import check_password
-
-from rest_framework import viewsets
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenViewBase
 
-from src.app.repositories.user import UserRepository
-from src.app.models import User
-from src.app.dtos.auth import LoginDTO
 from src.app.dtos.token import TokenDto, TokenDTO
 
 
@@ -20,7 +13,7 @@ class TokenObject(object):
 class AuthenticationService(TokenViewBase):
     request = None
     format_kwarg = None
-    
+
     def get_serializer_class(self):
         return TokenDTO
 

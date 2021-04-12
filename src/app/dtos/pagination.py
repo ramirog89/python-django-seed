@@ -1,5 +1,4 @@
-from rest_framework import serializers, pagination
-from src.app.dtos.user import UserDto
+from rest_framework import serializers
 
 
 class PaginationQueryParamsDto(serializers.Serializer):

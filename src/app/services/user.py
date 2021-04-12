@@ -1,8 +1,7 @@
 from serum import inject, dependency
-from rest_framework.exceptions import APIException, ParseError
 
 from src.app.repositories.user import UserRepository
-from src.app.dtos import UserDto, UserCreateDto, UserUpdateDto
+from src.app.dtos import UserDto
 from src.app.utils.pagination import paginate
 
 

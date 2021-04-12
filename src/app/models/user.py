@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import UserManager, AbstractBaseUser
 
+
 class User(AbstractBaseUser):
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     username = models.CharField(max_length=200, unique=True)
