@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'drf_yasg'
+    'drf_yasg',
+    'django_celery_results' # this will save the results of celery tasks
 ]
 
 MIDDLEWARE = [
@@ -193,3 +194,32 @@ LOGGING = {
         },
     },
 }
+
+
+CELERY_TIMEZONE = "Australia/Tasmania"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# Rabbit MQ
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+
+# List of modules to import when the Celery worker starts.
+CELERY_IMPORTS = ('src.app.tasks',)
+
+
+CELERY_RESULT_BACKEND = 'django-db'
+
+# CELERY_RESULT_BACKEND = 'django-cache'
+
+# celery setting.
+CELERY_CACHE_BACKEND = 'default'
+
+# django setting.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
+
+CELERY_TASK_ANNOTATIONS = {'tasks.add': {'rate_limit': '10/s'}}

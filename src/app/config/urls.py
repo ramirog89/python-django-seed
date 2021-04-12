@@ -34,5 +34,6 @@ urlpatterns = [
     path('users/<int:id>', controllers.user.get, name='get user'),
     path('users/create', controllers.user.create, name='create user'),
     path('users/update/<int:id>', controllers.user.update, name='update user'),
-    path('users/delete/<int:id>', controllers.user.delete, name='delete user')
+    path('users/delete/<int:id>', controllers.user.delete, name='delete user'),
+    path('mail/send', controllers.mail.send, name='send mail')
 ]
