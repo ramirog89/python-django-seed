@@ -200,12 +200,14 @@ CELERY_TIMEZONE = "Australia/Tasmania"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
-# Rabbit MQ
+# Rabbit MQ as Message Broker
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+
+# Redis as Keep Track of results
+# CELERY_RESULT_BACKEND = 'redis://localhost'
 
 # List of modules to import when the Celery worker starts.
 CELERY_IMPORTS = ('src.app.tasks',)
-
 
 CELERY_RESULT_BACKEND = 'django-db'
 
